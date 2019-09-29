@@ -1,0 +1,384 @@
+{
+  "homepages": [],
+  "source_base_path": "C:/Users/sjefv/gitlab.com/virtual-society/life-events",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Conceptual",
+      "source_relative_path": "README.md",
+      "output": {
+        ".html": {
+          "relative_path": "README.html",
+          "hash": "SFy0rrN1gLiSmJUH4yFvYA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.Shared.LifeEvent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.Shared.LifeEvent.html",
+          "hash": "yBdjiA20zNVlk8PTCSpXGg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.Shared.Messages.ILifeEventsClient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.Shared.Messages.ILifeEventsClient.html",
+          "hash": "yfh2+vWgVSOwnW7/uV7/dA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.Shared.Messages.IResponse.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.Shared.Messages.IResponse.html",
+          "hash": "oAblKSaiC0isJqIVwvmXGg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.Shared.Messages.JoinSimulationRequest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.Shared.Messages.JoinSimulationRequest.html",
+          "hash": "oZCqUpIIeb+v6uQ40xBI1Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.Shared.Messages.JoinSimulationResponse.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.Shared.Messages.JoinSimulationResponse.html",
+          "hash": "pK3TCHeD8HYPfUbeTNQ8Pw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.Shared.Messages.LeaveSimulationRequest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.Shared.Messages.LeaveSimulationRequest.html",
+          "hash": "+C7p3ALFzxFueEvJ/Q8aXw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.Shared.Messages.LeaveSimulationResponse.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.Shared.Messages.LeaveSimulationResponse.html",
+          "hash": "4r6udtJdbvuOUVv9IRitWw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.Shared.Messages.Message-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.Shared.Messages.Message-1.html",
+          "hash": "CVXUbwYphLICZ4ZFinliSQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.Shared.Messages.Persoon.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.Shared.Messages.Persoon.html",
+          "hash": "JPWzT1ZgHq28by9LW6YjgA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.Shared.Messages.Responses.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.Shared.Messages.Responses.html",
+          "hash": "fnU6CoQJas47N4/5FwcANg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.Shared.Messages.SimulationStates.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.Shared.Messages.SimulationStates.html",
+          "hash": "X7TsSBOnWOOW7piXdgkDCw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.Shared.Messages.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.Shared.Messages.html",
+          "hash": "zp4B3ABoRFkBdUO9A3mM2Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.Shared.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.Shared.html",
+          "hash": "802XG18xCfmCTyQZPOv8Tw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.SignalR.Server.FilePlayer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.SignalR.Server.FilePlayer.html",
+          "hash": "8XDeVEI+yIE8xtM7rvaGQA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.SignalR.Server.ILifeEventsPlayer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.SignalR.Server.ILifeEventsPlayer.html",
+          "hash": "OfPWcaDc7LZ5lvM7dOX0ew=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.SignalR.Server.LifeEventsHub.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.SignalR.Server.LifeEventsHub.html",
+          "hash": "HbTdniue3ws04rtFvMrcfQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.SignalR.Server.Program.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.SignalR.Server.Program.html",
+          "hash": "MJFO3OHzGBHQU8cFTw7E7g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.SignalR.Server.Startup.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.SignalR.Server.Startup.html",
+          "hash": "W0kWkhkBUqrsr+/Mtc7b3g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/LifeEvents.SignalR.Server.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/LifeEvents.SignalR.Server.html",
+          "hash": "bjIC7kqRh7AIUj7LnYBSUw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "Ue1jTcldARK1XVzIztySnQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "3GbzJQRTBLc9RyIyQ0asyg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html",
+          "hash": "xQsBqNUN8KAH7Kx2T+tZXA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "t7iiFrmuYmrKWisdq+lN6Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/logo-256-blue.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/logo-256-blue.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "BDeXg1hVlXkCM3762bte9g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "k+/dkjFuwAVS32HduMpmBw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": true,
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 4,
+          "skipped_file_count": 4
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 19,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": true,
+        "details": "Can support incremental post processing.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
