@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Sim# Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Sim# Documentation ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../../../favicon.ico">
+    <link rel="stylesheet" href="../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <meta property="docfx:navrel" content="../../../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../index.html">
+                <img id="logo" class="svg" src="../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="sim-documentation">Sim# Documentation</h1>
+
+<p>The documentation covers the following aspects:</p>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#modeling">Modeling</a>
+<ul>
+<li><a href="#processes">Processes</a></li>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#putting-it-together">Putting it together</a></li>
+</ul>
+</li>
+<li><a href="#monitoring">Monitoring</a>
+<ul>
+<li><a href="#reports">Reports</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="introduction">Introduction</h2>
+<p>Sim# is available as a <a href="https://www.nuget.org/packages/SimSharp/">nuget package</a>. To use Sim# in your code simply add this package to your .NET project using Visual Studio or the dotnet command line tool:</p>
+<pre><code>dotnet add package SimSharp
+</code></pre>
+<p>It is available for .NET Framework 4.5 and .NET Standard 2.0 and thus can be used with almost any .NET Framework version published since 2012.</p>
+<h2 id="modeling">Modeling</h2>
+<p>Sim# is a <em>process-based</em> discrete event simulation framework. Models are defined by creating <em>processes</em> that interact with each other or with shared <em>resources</em>. Both processes and resources reference a common <em>environment</em> which also contains the simulation time, random number generators, and the event queue.</p>
+<h3 id="processes">Processes</h3>
+<p>A process is defined by a more or less complex sequence of <em>events</em> and is implemented in form of a method. At any time only one process may be active. In this time the process can do calculations and return a next event or finish eventually. A process that returns an event becomes passive and is activated again when the event is processed or when it is interrupted.</p>
+<p>The following simple snippet defines a process that outputs the simulation time whenever it is active.</p>
+<pre><code class="lang-c#">static IEnumerable&lt;Event&gt; AProcess(Simulation env) {
+  env.Log(&quot;The time is {0}&quot;, env.NowD);
+  yield return env.TimeoutD(3.0);
+  env.Log(&quot;The time is {0}&quot;, env.NowD);
+  yield return env.TimeoutD(3.0);
+  env.Log(&quot;The time is {0}&quot;, env.NowD);
+}
+
+static void Main(string[] args) {
+  var env = new Simulation();
+  env.Process(AProcess(env));
+  env.Run();
+}
+// outputs:
+//The time is 0
+//The time is 3
+//The time is 6
+</code></pre>
+<h3 id="resources">Resources</h3>
+<p>Resources in a model describe shared items that processes may compete for or which are used to achieve communication between processes. The standard resources provided by Sim# can be distinguished into three categories:</p>
+<ul>
+<li><em>Spectrum</em>: Discrete or Continuous</li>
+<li><em>Mixture</em>: Homogeneous or Heterogeneous</li>
+<li><em>Contract</em>: Lease or Consume</li>
+</ul>
+<p>Discrete resources usually consider a finite number of entities which are represented by a discrete number or instances of an object. On the other hand, continuous resources usually just capture the total quantity in a continuous number.</p>
+<p>Continuous resources implicitly assume a single homogeneous entity of varying size. However, discrete resources may either be homogeneous or heterogeneous. In the later case the entities have further, potentially unique properties, while for a homogeneous resource all entities are exactly alike and only their number is of interest.</p>
+<p>Finally, the contract category describes whether a certain amount or quantity of the resource is leased and has to be returned or whether it is consumed. For instance, a worker will usually be modelled as being leased, while a warehouse may be a resource that allows stocking and consuming items.</p>
+<p>The following resources are implemented:</p>
+<ul>
+<li><strong>Resource, PriorityResource, PreemptivePriorityResource</strong> - Discrete, Homogeneous, Lease</li>
+<li><strong>ResourcePool</strong> - Discrete, Heterogeneous, Lease</li>
+<li><strong>Store, FilterStore, PriorityStore</strong> - Discrete, Heterogeneous, Consume</li>
+<li><strong>Container</strong> - Continuous, Homogeneous, Consume</li>
+</ul>
+<p>A <em>Resource</em> contains a discrete number of homogeneous entities that can be requested and which have to be released back to the resource eventually. It employs a FIFO queue to arrange requests. There exist variants in form of a <em>PriorityResource</em> and a <em>PreemptivePriorityResource</em> to which requests with a certain priority may be made in both cases. Preemptive resources may additionally retract a processes' lease prematurely. The process that holds the lease is interrupted and has to handle the preemption or fault otherwise.</p>
+<p>The <em>ResourcePool</em> is similar to the above Resource, but consists of identifiable entities. This type is not part of SimPy and has been introduced in Sim#. This may be useful, for instance when modeling a pool of employees with their individual characteristics, e.g., qualifications. An entity from the resource pool may only be borrowed for some time and has to be returned. Requests to a ResourcePool may specify a filter to define the properties of the individual to be requested (e.g. some qualification).</p>
+<p>A <em>Store</em> contains a discrete set of heterogeneous items that can be added to and removed from. Stores may have a maximum capacity. A so called <em>FilterStore</em> exists to retrieve items that fulfill some criteria. Store and ResourcePool are very similar, however in a Store the item does not need to return (consume instead of lease). A <em>PriorityStore</em> exists in which items have some form of priority and they are consumed in priority order, while still each put and get operation is executed in FIFO order.</p>
+<p>A <em>Container</em> contains a continuous amount of some substance. Again, the substance may be stocked in the container and consumed.</p>
+<p>In any case, it is simple to extend the standard resources given that the code is open source. The classes are of moderate complexity, e.g. the <em>Resource</em> class is described in about 200 lines of code.</p>
+<h3 id="putting-it-together">Putting it together</h3>
+<p>Processes that interact with common resources may create highly dynamic behavior which may not be analytically tractable and thus have to be simulated. Sim# includes a number of samples that, while being easy to understand and simple, show how to model certain processes such as preemption, interruption, handover of resource requests and more. A short summary of the provided samples together with the highlights are given in the following:</p>
+<h5 id="bankrenege"><a href="../src/Samples/BankRenege.cs">BankRenege</a></h5>
+<ul>
+<li>Timeout when waiting for a resource</li>
+<li>Track and print statistics</li>
+</ul>
+<p>The bank renege sample uses a single shared resource (bank teller) that customers queue for. There is a single queue and each customer has a certain patience for waiting in the queue. When the patience has run out, the customer will leave the queue without doing business. The queue is not explicitly added to the model, but is part of the Resource that models the bank teller. This resource can automatically track statistics on the queue's length and waiting time.</p>
+<h5 id="gasstationrefueling"><a href="../src/Samples/GasStationRefueling.cs">GasStationRefueling</a></h5>
+<ul>
+<li>Combination of discrete (fuel pump) and continuous resource (tank)</li>
+<li>Use of <em>When</em>-events to react to resupply of the tank</li>
+</ul>
+<p>The gas station refueling sample uses both a discrete (fuel pump) and a continuous (tank) resource. Cars are queuing at the fuel pump and consume gasoline from the tank. When the tank runs below a certain threshold a truck is dispatched to refill it. <em>When</em>-events of resources were introduced as part of the Sim# 3.1 release (they are ported from the <a href="https://desmod.readthedocs.io/en/latest/">desmod</a> package - an extension of SimPy). Note that the Sim# is a discrete event simulation kernel, thus there cannot be a continuous drain from the tank.</p>
+<h5 id="kanbancontrol"><a href="../src/Samples/KanbanControl.cs">KanbanControl</a></h5>
+<ul>
+<li>Usage of Monitors to track variables in user code</li>
+</ul>
+<p>The kanban control sample shows how a simple production system that uses kanban can be modeled. It shows how to use monitors to track a variable of interest (the number of kanbans in stock over time).</p>
+<h5 id="machineshop-and-machineshopspecialist"><a href="../src/Samples/MachineShop.cs">MachineShop</a> and <a href="../src/Samples/MachineShopSpecialist.cs">MachineShopSpecialist</a></h5>
+<ul>
+<li>Interrupting other processes</li>
+<li>Usage of PreemptivePriorityResource and ResourcePool</li>
+</ul>
+<p>In this model a production system with machine break-downs is described. In the event of a break-down the current job is interrupted and suspended until a repairman has been dispatched to fix it. The -Specialist model additionally shows how to use the ResourcePool to model repairman with different characteristics.</p>
+<h5 id="mm1queueing"><a href="../src/Samples/MM1Queueing.cs">MM1Queueing</a></h5>
+<ul>
+<li>Comparison of analytic with simulated results</li>
+<li>Tracking of statistics</li>
+<li>Reports</li>
+</ul>
+<p>The &quot;Hello World&quot; of simulation models. It shows how to perform repetitions and track statistical properties. It also prints the analytical properties of this system - which are known in this case.</p>
+<h5 id="processcommunication"><a href="../src/Samples/ProcessCommunication.cs">ProcessCommunication</a></h5>
+<ul>
+<li>Interaction between processes</li>
+<li>Store resource</li>
+</ul>
+<p>This model describes a simple producer-consumer situation. It shows how processes may interact with each other using a Store resource.</p>
+<h5 id="simpleshop-and-steelfactory"><a href="../src/Samples/SimpleShop.cs">SimpleShop</a> and <a href="../src/Samples/SteelFactory.cs">SteelFactory</a></h5>
+<ul>
+<li>Acquiring and releasing a resource in separate processes</li>
+</ul>
+<p>These model describe a two-step production. The first step may be blocked by the second. The models should show how one process may obtain a resource, but another processes releases that resource.</p>
+<h2 id="monitoring">Monitoring</h2>
+<p>Monitoring has been introduced with Sim# 3.2. Instead of following the SimPy approach which is difficult to translate to .NET. The implementation in Sim# is more akin to <a href="https://www.salabim.org">Salabim</a>.</p>
+<p>There are two different kinds of monitors:</p>
+<ol>
+<li><em>SampleMonitor</em> - is used when the distribution of a variable is characterized by independent samples. For instance, the lead time of a process is such a variable. For each process there is an individual lead time which together form some kind of distribution.</li>
+<li><em>TimeSeriesMonitor</em> - is used when the variable is a time series, that is, when a variable may change its state over time. For instance, the utilization of a resource may change over time and a weighted average with respect to the duration of each level is required.</li>
+</ol>
+<p>Each resource class defines certain variables and the respective type of monitor for that variable. By default no monitoring is tacking place, but such variables may be assigned a monitor and subsequently this will be tracked. In the following snippet a server is created where its <em>utilization</em> and the <em>waiting time</em> in the queue are tracked:</p>
+<pre><code class="lang-c#">var env = new Simulation();
+var server = new Resource(env, capacity: 5) {
+  Utilization = new TimeSeriesMonitor(env),
+  WaitingTime = new SampleMonitor()
+};
+</code></pre>
+<p>Monitors may be created with <code>collect: true</code>. This means the monitor will keep the datapoints and thus can compute median, percentiles, and print a histogram of the data. By default collect is false, which still allows computing min, max, mean, standard deviation, count, and sum and in a memory efficient way.</p>
+<p>As has been mentioned above, the KanbanControl sample shows how to use monitors in the code that describes the model in order to track own variables of interest.</p>
+<h3 id="reports">Reports</h3>
+<p>A report may be defined that summarizes many monitors and prints the selected statistical properties in one line. A report may be directed to a different file and may be performed only at the end, for every update to the statistic or periodically. This enables a quick way to follow some basic statistics in the execution of a model.</p>
+<p>Examples of how to use reports are present in the <a href="../src/Samples/MM1Queueing.cs">MM1Queueing</a> sample:</p>
+<pre><code class="lang-c#">var report = Report.CreateBuilder(env)
+  .Add(&quot;Utilization&quot;, utilization, Report.Measures.Mean | Report.Measures.StdDev)
+  .Add(&quot;WIP&quot;, wip, Report.Measures.Min | Report.Measures.Mean | Report.Measures.Max)
+  .Add(&quot;Leadtime&quot;, leadtime, Report.Measures.Min | Report.Measures.Mean | Report.Measures.Max)
+  .Add(&quot;WaitingTime&quot;, waitingtime, Report.Measures.Min | Report.Measures.Mean | Report.Measures.Max)
+  .SetOutput(env.Logger) // use a &quot;new StreamWriter(&quot;report.csv&quot;)&quot; to direct to a file
+  .SetSeparator(&quot;\t&quot;)
+  .SetPeriodicUpdate(TimeSpan.FromDays(7), withHeaders: true)
+  .Build();
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../styles/main.js"></script>
+  </body>
+</html>

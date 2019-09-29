@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Sim# (SimSharp) </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Sim# (SimSharp) ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="sim-simsharp">Sim# (SimSharp)</h1>
+
+<p>A .NET port and extension of SimPy, process-based discrete event simulation framework</p>
+<p><a href="https://ci.appveyor.com/project/abeham/simsharp/branch/master"><img src="https://ci.appveyor.com/api/projects/status/hyn83qegeiga81o2/branch/master?svg=true" alt="Build status"></a></p>
+<hr>
+<p><em>Disclaimer: Sim# is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. Sim# is free software: Sim# can be redistributed and/or modified under the terms of the MIT License.</em></p>
+<hr>
+<p>Sim# aims to port the concepts used in SimPy [1] to the .NET world. Sim# is implemented in C# and is available via Nuget for .NET Framework 4.5 and is also .NET Standard 2.0 compliant. Sim# uses an efficient event queue (adapted from [3]) that allows to compute models very quickly. Simulating 10 years of the MachineShop sample [4], that uses preemptive resources, requires less than 1.5s on a Core i7-7 2.7Ghz. This model generates more than 5 million events.</p>
+<p>Sim# allows modeling processes easily and with little boiler plate code. A process is described as a method that yields events. When an event is yielded, the process waits on it. Processes are themselves events and so it is convenient to spawn sub-processes that can either be waited upon or that run next to each other. There is no need to inherit from classes or understand a complex object oriented design.</p>
+<p>To demonstrate how simple models can be expressed with little code, consider a model of an m/m/1 queuing system as expressed in Sim#:</p>
+<pre><code class="lang-csharp">TimeSpan ARRIVAL_TIME = TimeSpan.FromSeconds(...);
+TimeSpan PROCESSING_TIME = TimeSpan.FromSeconds(...);
+TimeSpan SIMULATION_TIME = TimeSpan.FromHours(...);
+
+IEnumerable&lt;Event&gt; MM1Q(Simulation env, Resource server) {
+  while (true) {
+    yield return env.TimeoutExponential(ARRIVAL_TIME);
+    env.Process(Item(env, server));
+  }
+}
+
+IEnumerable&lt;Event&gt; Item(Simulation env, Resource server) {
+  using (var s = server.Request()) {
+    yield return s;
+    yield return env.TimeoutExponential(PROCESSING_TIME);
+    Console.WriteLine(&quot;Duration {0}&quot;, env.Now - s.Time);
+  }
+}
+
+void RunSimulation() {
+  var env = new Simulation(randomSeed: 42);
+  var server = new Resource(env, capacity: 1) {
+      QueueLength = new TimeSeriesMonitor(env, collect: true)
+  }
+  env.Process(MM1Q(env, server));
+  env.Run(SIMULATION_TIME);
+  Console.WriteLine(server.QueueLength.Summarize());
+}
+</code></pre>
+<p>This model uses the monitoring capabilities introduced with Sim# 3.2. Monitoring allows describing certain variables in the model, e.g. the number of waiting items before the server. The monitor maintains a set of statistical properties such as mean, standard deviation, and can also print histograms. Monitors can be assigned to the variables exposed by resources or they can be used to track other variables.</p>
+<p>Sim# tries to be as easy to use as SimPy, but also remains true to the .NET Framework. The most obvious difference between SimPy and Sim# is handling process interruptions. In Sim# a process that can be interrupted needs to call</p>
+<pre><code class="lang-csharp">if (Environment.ActiveProcess.HandleFault()) {...}
+</code></pre>
+<p>after each yield in which an interruption can occur and before continuing to yield further events. This is due to a limitation of the .NET Framework: In Python it is possible to put a try-except block around a yield statement, and an exception can be injected into the iterator. In .NET this is not possible.</p>
+<p>Also in Sim# it was decided to base the unit for current time and delays on <code>DateTime</code> and <code>TimeSpan</code> in the simulation clock. There is however an API, called D-API (short for double-API) that allows you to use doubles as in SimPy, e.g. <code>env.Now</code> returns a <code>DateTime</code>, <code>env.NowD</code> returns a <code>double</code>, <code>env.Timeout(delay</code>) expects a <code>TimeSpan</code> as delay, <code>env.TimeoutD(delay)</code> expects a <code>double</code>, etc.. It is possible to initialize the Environment with a default timestep in case both APIs are used:</p>
+<pre><code class="lang-csharp">var env = new Simulation(defaultStep: TimeSpan.FromMinutes(1));
+</code></pre>
+<p>In that environment, calling <code>env.TimeoutD(1)</code> would be equal to calling the more elaborate standard API <code>env.Timeout(TimeSpan.FromMinutes(1))</code>.</p>
+<h2 id="references">References</h2>
+<ol>
+<li><a href="https://pypi.python.org/pypi/simpy">Python Simpy Package</a></li>
+<li><a href="https://www.nuget.org/packages/SimSharp/">Nuget package</a></li>
+<li><a href="https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp">High speed priority queue</a></li>
+<li><a href="src/Samples/MachineShop.cs">Machine Shop Example</a></li>
+</ol>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
